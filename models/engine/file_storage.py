@@ -16,7 +16,6 @@ class FileStorage:
             for val in FileStorage.__objects.values():
                 if val.to_dict()['__class__'] == cls.__name__:
                     to_add.append(val.to_dict()['__class__'] + '.' + val.id)
-            print(cls_obj)
             for i in to_add:
                 cls_obj[i] = FileStorage.__objects[i]
             return cls_obj
@@ -64,3 +63,4 @@ class FileStorage:
         """deletes an obj"""
         if obj:
             del self.all()[obj.to_dict()['__class__'] + '.' + obj.id]
+            self.save()
