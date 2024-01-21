@@ -10,7 +10,7 @@ Base = declarative_base()
 class BaseModel():
     """A base class for all hbnb models"""
 
-    id = Column(String(60), nullable=False, primary_key=True)
+    id = Column(String(60), nullable=False, primary_key=True, default=str(uuid.uuid4()))
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
@@ -19,8 +19,8 @@ class BaseModel():
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
         else:
             for key in kwargs.keys():
                 if key != '__class__':
