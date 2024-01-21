@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from os import getenv
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -127,6 +128,7 @@ class HBNBCommand(cmd.Cmd):
             new_instance = HBNBCommand.classes[arg[0]]()
             storage.save()
             print(new_instance.id)
+            new_instance.save()
             storage.save()
         elif len(args) > 1:
             params = arg[1:]
@@ -150,6 +152,7 @@ class HBNBCommand(cmd.Cmd):
                 new_instance.__dict__[i[0]] = i[1]
             storage.save()
             print(new_instance.id)
+            new_instance.save()
             storage.save()
 
     def help_create(self):
@@ -213,8 +216,11 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
-            storage.save()
+            if getenv("HBNB_TYPE_STORAGE") == "db":
+                storage.delete(storage.all()[key])
+            else:
+                del(storage.all()[key])
+                storage.save()
         except KeyError:
             print("** no instance found **")
 
@@ -232,11 +238,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)

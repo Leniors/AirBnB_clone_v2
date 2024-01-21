@@ -32,24 +32,27 @@ class DBStorage():
         host = getenv("HBNB_MYSQL_HOST", default="localhost")
         db = getenv("HBNB_MYSQL_DB")
 
-        self.__engine = create_engine(
+        DBStorage.__engine = create_engine(
             f'mysql+mysqldb://{user}:{password}@{host}/{db}', pool_pre_ping=True)
 
         if getenv("HBNB_ENV") == "test":
-            Base.metadata.drop_all(self.__engine)
+            Base.metadata.drop_all(DBStorage.__engine)
 
     def all(self, cls=None):
         """querry tables"""
         result_dict = {}
         if cls:
-            list_obj = self.__session.query(cls).all()
+            list_obj = DBStorage.__session.query(cls).all()
             for obj in list_obj:
                 key = obj.to_dict()['__class__'] + '.' + obj.id
                 result_dict[key] = obj
         else:
             list_obj = []
-            for model_cls in classes.values():
-                list_obj.extend(self.__session.query(model_cls).all())
+            for model_cls in DBStorage.classes.values():
+                try:
+                    list_obj.extend(DBStorage.__session.query(model_cls).all())
+                except:
+                    pass
             for obj in list_obj:
                 key = obj.to_dict()['__class__'] + '.' + obj.id
                 result_dict[key] = obj
@@ -58,19 +61,20 @@ class DBStorage():
 
     def new(self, obj):
         """new object"""
-        self.__session.add(obj)
+        DBStorage.__session.add(obj)
 
     def save(self):
         """save objects"""
-        self.__session.commit()
+        DBStorage.__session.commit()
 
     def delete(self, obj=None):
         """delete object"""
         if obj:
-            self.__session.add(obj)
+            DBStorage.__session.delete(obj)
+            DBStorage.__session.commit()
 
     def reload(self):
         """Create tables"""
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(Session)()
+        DBStorage.__session = scoped_session(Session)()
