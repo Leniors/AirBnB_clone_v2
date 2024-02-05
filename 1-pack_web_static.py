@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Creating a tar file for my web_static folder using fabric module
+"""
+Creating a tar file for my web_static folder using fabric module
 """
 
 from fabric.api import *
@@ -13,7 +14,7 @@ def do_pack():
 
     # Create the archive name based on the current date and time
     now = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_name = "web_static_{}".format(now)
+    archive_name = "web_static_{}.tgz".format(now)
 
     # Create the archive
     result = local("tar -czvf versions/{} web_static".format(archive_name))
