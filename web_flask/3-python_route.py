@@ -28,9 +28,9 @@ def text(text):
 @app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python(text):
-    """ c/<text> route for Flask Appliction """
+    """ python/<text> route for Flask Appliction """
     text = text.replace("_", " ")
-    return f"C {text}"
+    return f"Python {text}"
 
 if __name__ == "__main__":
     app.run()
