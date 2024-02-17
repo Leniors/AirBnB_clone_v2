@@ -21,7 +21,7 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def text(text):
-    """ hbnb route for Flask Appliction """
+    """ c/<text> route for Flask Appliction """
     return f"C {text}"
 
 
