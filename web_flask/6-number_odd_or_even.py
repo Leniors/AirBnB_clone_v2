@@ -53,7 +53,7 @@ def number_odd_or_even(n):
         content = f"Number: {n} is even"
     else:
         content = f"Number: {n} is odd"
-    return render_template('5-number.html', content=content)
+    return render_template('6-number_odd_or_even.html', content=content)
 
 
 if __name__ == "__main__":
