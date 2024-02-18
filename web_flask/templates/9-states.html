@@ -4,7 +4,9 @@
     <TITLE>HBNB</TITLE>
   </HEAD>
   <BODY>
-	  {% if states %}
+	  {% if not states %}
+	  	<H1>Not found!</H1>
+	  {% else %}
 	  <H1>States</H1>
 	  <UL>
 	  {% for state in states %}
