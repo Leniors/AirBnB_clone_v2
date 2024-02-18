@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
 
 from flask import Flask, render_template
-from models.__init__ import storage
+from models import storage
 from models.state import State
 
 app = Flask(__name__)
