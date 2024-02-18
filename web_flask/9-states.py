@@ -29,10 +29,7 @@ def cities_by_states(id=None):
         states = storage.all(State).values()
         states_sorted = sorted(states, key=lambda state: state.name)
 
-        cities = storage.all(City).values()
-        cities_sorted = sorted(cities, key=lambda city: city.name)
-
-        return render_template('9-states.html', states=states_sorted, cities=cities_sorted)
+        return render_template('9-states.html', states=states_sorted, cities=None)
     else:
         states = storage.all(State).values()
         found_state = []
