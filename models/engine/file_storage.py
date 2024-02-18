@@ -70,5 +70,7 @@ class FileStorage:
             self.save()
 
     def close(self):
-        """ close fuction """
+        """
+        close fuction
+        """
         self.reload()
