@@ -17,9 +17,8 @@ class State(BaseModel, Base):
         name = Column(String(128), nullable=False)
         cities = relationship('City', backref='state', cascade='all, delete-orphan')
     else:
-        name = ""
         @property
         def cities(self):
             from models import storage
-            file_cities = storage.all(storage.classes['City']).values()
+            file_cities = storage.all(City).values()
             return [city for city in file_cities if city.state_id == self.id]
