@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Integer, DateTime
 from sqlalchemy.orm import declarative_base
+from os import getenv
 
 Base = declarative_base()
 
@@ -16,12 +17,11 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
-        else:
+        from models import storage
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
+        if kwargs:
             for key in kwargs.keys():
                 if key != '__class__':
                     if key == 'updated_at' or key == 'created_at':
@@ -31,7 +31,9 @@ class BaseModel():
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        attrs = self.__dict__.copy()
+        attrs.pop('_sa_instance_state', None)
+        return '[{}] ({}) {}'.format(cls, self.id, attrs)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -44,7 +46,7 @@ class BaseModel():
         """Convert instance into dict format"""
         dictionary = {}
         dictionary.update(self.__dict__)
-        if '_sa_instance_state' in dictionary.keys():
+        if '_sa_instance_state' in dictionary:
             del dictionary['_sa_instance_state']
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
